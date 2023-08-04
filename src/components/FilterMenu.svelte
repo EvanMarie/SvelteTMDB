@@ -8,7 +8,7 @@
 	}
 </script>
 
-<div class="filter-container">
+<div class="select-container">
 	<label for="filter">Filter by: </label>
 	<select bind:value={filter} id="filter" on:change={handleChange}>
 		<option value="popular">Popular</option>
@@ -21,26 +21,5 @@
 
 
 <style>
-select {
-    padding: 0.25rem;
-    border-radius: 0.5rem;
-    border: 1px solid cyan;
-}
 
-.filter-container {
-	display: flex;
-	align-items: center;
-	margin-bottom: 1rem;
-    font-size: 1rem;
-}
-
-.filter-container label {
-    margin-right: 0.75rem;
-}
-
-@media (min-width: 768px) {
-    .filter-container {
-        font-size: 1.5rem;
-    }
-}
 </style>

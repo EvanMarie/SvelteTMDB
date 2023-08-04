@@ -4,6 +4,8 @@
 	import PageContainer from './PageContainer.svelte';
 	import { filterStore } from '../lib/store.js';
 	import { onMount } from 'svelte';
+	import GenreMenu from './GenreMenu.svelte';
+	import Navigation from './Navigation.svelte';
 
 	let movies = [];
 	let genres = [];
@@ -33,8 +35,8 @@
 		});
 	}
 
-	function handleGenreChange(event) {
-		selectedGenre = event.target.value;
+	function handleGenreChange(genre) {
+		selectedGenre = genre;
 		loadMovies(filter);
 	}
 
@@ -48,16 +50,8 @@
 </script>
 
 <PageContainer>
+<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} selectedGenre={selectedGenre} />
 	<h1>{formatFilter(filter)}</h1>
-	<label>
-		Filter by Genre:
-		<select bind:value={selectedGenre} on:change={handleGenreChange}>
-			<option value="">Select Genre</option>
-			{#each genres as genre}
-				<option value={genre.id}>{genre.name}</option>
-			{/each}
-		</select>
-	</label>
 	<ul>
 		<div class="card-container">
 			{#each movies as movie}

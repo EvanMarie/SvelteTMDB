@@ -1,23 +1,33 @@
 <script>
-  import { genreStore } from '../lib/store.js';
-  import { onMount } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
+    import { fetchGenres } from '../lib/fetchFilms';
 
-  let selectedGenre = null;
+    export let selectedGenre; // Accept selectedGenre as a prop
 
-  onMount(() => {
-    // Call fetchGenres when component is mounted
-    fetchGenres();
-  });
+    let genres = [];
 
-  function handleGenreChange(event) {
-    selectedGenre = event.target.value;
-    // Call function to load movies with selected genre
-  }
+    const dispatch = createEventDispatcher();
+
+    onMount(() => {
+        fetchGenres().then((results) => {
+            genres = results;
+        });
+    });
+
+    function handleGenreChange(event) {
+        selectedGenre = event.target.value;
+        dispatch('genreChange', selectedGenre);
+    }
 </script>
 
-<select bind:value={selectedGenre} on:change={handleGenreChange}>
-  <option value="">Select Genre</option>
-  {#each $genreStore as genre}
-    <option value={genre.id}>{genre.name}</option>
-  {/each}
-</select>
+
+<div class="select-container">
+<label>
+    Filter by Genre:
+    <select bind:value={selectedGenre} on:change={handleGenreChange}>
+        <option value="">Select Genre</option>
+        {#each genres as genre}
+            <option value={genre.id}>{genre.name}</option>
+        {/each}
+    </select>
+</div>

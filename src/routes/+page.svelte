@@ -6,7 +6,6 @@
 </script>
 
 <PageContainer>
-	<Navigation />
 	<LoadMovies />
 	</PageContainer
 >
