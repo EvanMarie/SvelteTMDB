@@ -31,19 +31,17 @@
 		});
 	});
 
-function loadMovies(endpoint, queryParameters = '') {
-    // Modify this function to include genre ID if selected
+function loadMovies(endpoint, queryParameters = '', searchQuery = '') {
     const genreQuery = selectedGenre ? `&with_genres=${selectedGenre}` : '';
-    fetchMovies(endpoint, queryParameters + genreQuery).then((results) => {
-        movies = results
-            .filter((movie) => movie.backdrop_path && movie.backdrop_path.trim() !== '') // filter out movies without an image
-            .map((movie) => ({
-                ...movie,
-                overview: truncateText(movie.overview, 70),
-                color: getNextColor(),
-            }));
+    fetchMovies(endpoint, queryParameters + genreQuery, searchQuery).then((results) => {
+        movies = results.map((movie) => ({
+            ...movie,
+            overview: truncateText(movie.overview, 70),
+            color: getNextColor()
+        }));
     });
 }
+
 
 	function handleGenreChange(genre) {
 		selectedGenre = genre;
@@ -73,11 +71,21 @@ function loadMovies(endpoint, queryParameters = '') {
 		colorIndex = (colorIndex + 1) % colors.length;
 		return color;
 	}
+
+	function handleSearchChange(searchQuery) {
+		// console.log('Handling Search:', searchQuery);
+		loadMovies(filter, '', searchQuery);
+	}
+
+	const DEFAULT_IMAGE_URL = '/noimage.png';
 </script>
 
 <PageContainer>
-	<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} selectedGenre={selectedGenre} selectedGenreNameValue={selectedGenreNameValue} />
-
+	<Navigation
+		on:genreChange={(event) => handleGenreChange(event.detail)}
+		on:searchChange={(event) => handleSearchChange(event.detail)}
+		{selectedGenre}
+	/>
 
 	<h1 style="margin-bottom: 1rem;">{formatFilter(filter)} {selectedGenreNameValue}</h1>
 
@@ -87,7 +95,9 @@ function loadMovies(endpoint, queryParameters = '') {
 				<div class="card-styles" style="background-color: {movie.color}">
 					<figure>
 						<img
-							src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+							src={movie.backdrop_path
+								? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
+								: DEFAULT_IMAGE_URL}
 							alt="Movie Poster"
 							class="movie-poster"
 						/>

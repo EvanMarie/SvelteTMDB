@@ -5,14 +5,21 @@
 	import { selectedGenreName } from '../lib/store'; // Import the selectedGenreName store
 
 	export let selectedGenre;
-    export let selectedGenreNameValue;
+	export let selectedGenreNameValue;
+	let searchQuery = '';
 
+	function handleSearchInput(event) {
+		if (event.key === 'Enter') {
+			console.log('Search Query:', searchQuery);
+			dispatch('searchChange', searchQuery);
+		}
+	}
 
 	const dispatch = createEventDispatcher();
 
 	// Subscribe to the selectedGenreName store to get the current selected genre name
 
-	selectedGenreName.subscribe(value => {
+	selectedGenreName.subscribe((value) => {
 		selectedGenreNameValue = value;
 	});
 
@@ -22,11 +29,17 @@
 </script>
 
 <div class="navigation-container">
-	<h1>Search</h1>
-<GenreMenu on:genreChange={handleGenreChange} selectedGenre={selectedGenre} />
+	<div class="input-container">
+		<input
+			type="text"
+			bind:value={searchQuery}
+			placeholder="Search movies..."
+			on:keydown={handleSearchInput}
+		/>
+	</div>
+	<GenreMenu on:genreChange={handleGenreChange} {selectedGenre} />
 
 	<FilterMenu />
-
 </div>
 
 <style>
@@ -35,13 +48,14 @@
 		padding: 10px 20px;
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
+		justify-content: center;
 		align-items: center;
 	}
 
 	@media (min-width: 768px) {
 		.navigation-container {
 			flex-direction: row;
+			gap: 40px;
 		}
 	}
-</style> 
+</style>
