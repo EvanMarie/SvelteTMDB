@@ -1,11 +1,12 @@
+<!-- GenreMenu.svelte -->
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { fetchGenres } from '../lib/fetchFilms';
+	import { selectedGenreName } from '../lib/store'; // Import the selectedGenreName store
 
 	export let selectedGenre; // Accept selectedGenre as a prop
 
 	let genres = [];
-	let selectedGenreName = ''; // Store the selected genre name separately
 
 	const dispatch = createEventDispatcher();
 
@@ -17,13 +18,21 @@
 
 	function handleGenreChange(event) {
 		selectedGenre = event.target.value;
-		dispatch('genreChange', selectedGenre);
+		const genreName = findGenreName(selectedGenre);
+		selectedGenreName.set(genreName); // Update the selectedGenreName store with the genre name
+		dispatch('genreChange', selectedGenre); // Emit the genreChange event with the selectedGenre
+	}
+
+	// Helper function to find the genre name based on genre ID
+	function findGenreName(genreId) {
+		const genre = genres.find((g) => g.id === parseInt(genreId));
+		return genre ? genre.name : '';
 	}
 </script>
 
 <div class="select-container">
 	<label>
-		Filter by Genre:
+		Genre:
 		<select bind:value={selectedGenre} on:change={handleGenreChange}>
 			<option value="">Select Genre</option>
 			{#each genres as genre}

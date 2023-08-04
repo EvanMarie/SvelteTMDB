@@ -6,11 +6,20 @@
 	import { onMount } from 'svelte';
 	import GenreMenu from './GenreMenu.svelte';
 	import Navigation from './Navigation.svelte';
+	import { selectedGenreName } from '../lib/store'; // Import the selectedGenreName store
 
 	let movies = [];
 	let genres = [];
 	let filter;
-    let selectedGenre = "";
+	let selectedGenre = '';
+
+	// Subscribe to the selectedGenreName store to get the current selected genre name
+	let selectedGenreNameValue;
+	selectedGenreName.subscribe(value => {
+		selectedGenreNameValue = value;
+
+	});
+
 
 	$: filterStore.subscribe((value) => {
 		filter = value;
@@ -61,8 +70,10 @@
 </script>
 
 <PageContainer>
-	<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} {selectedGenre} />
-	<h1 style="margin-bottom: 1rem;">{formatFilter(filter)} {selectedGenre}</h1>
+	<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} selectedGenre={selectedGenre} selectedGenreName={selectedGenreName} />
+
+	<h1 style="margin-bottom: 1rem;">{formatFilter(filter)} {selectedGenreNameValue}</h1>
+	
 	<ul>
 		<div class="card-container">
 			{#each movies as movie}

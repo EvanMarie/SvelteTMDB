@@ -9,7 +9,7 @@
 </script>
 
 <div class="select-container">
-	<label for="filter">Filter by: </label>
+	<label for="filter">Category: </label>
 	<select bind:value={filter} id="filter" on:change={handleChange}>
 		<option value="popular">Popular</option>
 		<option value="top_rated">Top Rated</option>
