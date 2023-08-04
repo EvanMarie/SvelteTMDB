@@ -9,8 +9,8 @@
 
 	let movies = [];
 	let genres = [];
-	let selectedGenre = null;
 	let filter;
+    let selectedGenre = "";
 
 	$: filterStore.subscribe((value) => {
 		filter = value;
@@ -30,13 +30,15 @@
 		fetchMovies(endpoint, queryParameters + genreQuery).then((results) => {
 			movies = results.map((movie) => ({
 				...movie,
-				overview: truncateText(movie.overview, 70)
+				overview: truncateText(movie.overview, 70),
+                 color: getNextColor(),
 			}));
 		});
 	}
 
 	function handleGenreChange(genre) {
 		selectedGenre = genre;
+        console.log(selectedGenre)
 		loadMovies(filter);
 	}
 
@@ -47,15 +49,24 @@
 			.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
 			.join(' ');
 	}
+
+	let colors = ['#5c0233', '#4a025c', '#1c025c', '#02475c', '#025c3e', '#a64c03'];
+	let colorIndex = 0; // Initialize the color index to 0
+
+	function getNextColor() {
+		const color = colors[colorIndex];
+		colorIndex = (colorIndex + 1) % colors.length;
+		return color;
+	}
 </script>
 
 <PageContainer>
-<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} selectedGenre={selectedGenre} />
-	<h1>{formatFilter(filter)}</h1>
+	<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} {selectedGenre} />
+	<h1 style="margin-bottom: 1rem;">{formatFilter(filter)} {selectedGenre}</h1>
 	<ul>
 		<div class="card-container">
 			{#each movies as movie}
-				<div class="card-styles">
+				<div class="card-styles" style="background-color: {movie.color}">
 					<figure>
 						<img
 							src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
@@ -64,7 +75,7 @@
 						/>
 					</figure>
 					<div class="card-body">
-						<h2 class="card-title">{movie.title}</h2>
+						<p class="card-title">{movie.title}</p>
 						<p>{movie.overview}</p>
 					</div>
 				</div>
@@ -79,26 +90,50 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		gap: 1rem;
+		gap: 1.25rem;
 	}
 
 	.movie-poster {
-		width: 300px;
-		height: 300px;
+		width: 250px;
+		height: 200px;
 		border-radius: 10px;
 		box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.8);
 	}
 
 	.card-styles {
 		padding: 1rem;
-		background-color: darkcyan;
-		width: 375px;
+		width: 300px;
 		height: auto;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		border-radius: 10px;
-		box-shadow: 1px 1px 20px 1px rgba(0, 0, 0, 0.8);
+		box-shadow: 1px 1px 20px 1px rgba(0, 0, 0, 0.6);
+	}
+
+	.card-styles:hover {
+		cursor: pointer;
+		transform: scale(1.04) rotate(-1deg);
+		transition: transform 0.5s ease;
+	}
+
+	.card-title {
+        padding: 4px;
+        border-radius: 5px;
+		text-align: center;
+		font-size: 1.1rem;
+		text-shadow: 3px 2px 20px rgba(0, 0, 0, 1);
+        line-height: 1.2rem;
+        margin-top: 0.25rem;
+	}
+
+	.card-body {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 5px;
+		font-size: 0.85rem;
 	}
 </style>
