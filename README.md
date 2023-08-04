@@ -1,6 +1,3 @@
-Certainly! Here's a README file that describes the project and includes instructions on how to set up, use, and contribute to it. You can tailor this to your specific needs:
-
-````markdown
 # MovieDB Browser
 
 A modern and interactive web application that allows users to browse movies from the popular MovieDB API. With the MovieDB Browser, users can explore movies by different genres, sort them alphabetically, and access details about each movie.
@@ -25,32 +22,28 @@ These instructions will guide you through setting up the project locally.
 
 1. **Clone the Repository**:
 
-   ```bash
+   ```
    git clone https://github.com/yourusername/moviedb.git
    cd moviedb
    ```
-````
 
 2. **Install Dependencies**:
 
-   ```bash
+   ```
    npm install
    ```
 
 3. **Create Environment Variables**:
-
    Create a `.env` file in the root directory and add your MovieDB API key:
 
-   ```env
+   ```
    VITE_API_KEY=your_api_key_here
    ```
 
 4. **Start the Development Server**:
-
-   ```bash
+   ```
    npm run dev
    ```
-
    The application should now be running on [http://localhost:3000](http://localhost:3000).
 
 ## Contributing
@@ -60,26 +53,26 @@ If you'd like to contribute, please fork the repository and use a feature branch
 1. **Fork the Repository**: Click the 'Fork' button at the top right of this page.
 2. **Clone your Fork**:
 
-   ```bash
+   ```
    git clone https://github.com/yourusername/moviedb.git
    cd moviedb
    ```
 
 3. **Create a Feature Branch**:
 
-   ```bash
+   ```
    git checkout -b feature/your-feature
    ```
 
 4. **Make your Changes** and commit:
 
-   ```bash
+   ```
    git commit -m "Add some feature"
    ```
 
 5. **Push to GitHub**:
 
-   ```bash
+   ```
    git push origin feature/your-feature
    ```
 
