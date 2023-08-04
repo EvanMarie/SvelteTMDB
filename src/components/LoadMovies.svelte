@@ -15,10 +15,9 @@
 
 	// Subscribe to the selectedGenreName store to get the current selected genre name
 	let selectedGenreNameValue;
-	selectedGenreName.subscribe(value => {
+	selectedGenreName.subscribe((value) => {
 		selectedGenreNameValue = value;
 	});
-
 
 	$: filterStore.subscribe((value) => {
 		filter = value;
@@ -39,14 +38,21 @@
 			movies = results.map((movie) => ({
 				...movie,
 				overview: truncateText(movie.overview, 70),
-                 color: getNextColor(),
+				color: getNextColor()
 			}));
 		});
 	}
 
 	function handleGenreChange(genre) {
 		selectedGenre = genre;
+		selectedGenreName.set(findGenreName(genre)); // Update the selectedGenreName store with the genre name
 		loadMovies(filter);
+	}
+
+	// Add this helper function in the same scope as handleGenreChange
+	function findGenreName(genreId) {
+		const genre = genres.find((g) => g.id === parseInt(genreId));
+		return genre ? genre.name : '';
 	}
 
 	function formatFilter(filter) {
@@ -68,10 +74,11 @@
 </script>
 
 <PageContainer>
-	<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} selectedGenre={selectedGenre} />
+	<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} selectedGenre={selectedGenre} selectedGenreNameValue={selectedGenreNameValue} />
+
 
 	<h1 style="margin-bottom: 1rem;">{formatFilter(filter)} {selectedGenreNameValue}</h1>
-	
+
 	<ul>
 		<div class="card-container">
 			{#each movies as movie}
@@ -92,7 +99,6 @@
 		</div>
 	</ul>
 </PageContainer>
-
 
 <style>
 	.card-container {
@@ -129,13 +135,13 @@
 	}
 
 	.card-title {
-        padding: 4px;
-        border-radius: 5px;
+		padding: 4px;
+		border-radius: 5px;
 		text-align: center;
 		font-size: 1.1rem;
 		text-shadow: 3px 2px 20px rgba(0, 0, 0, 1);
-        line-height: 1.2rem;
-        margin-top: 0.25rem;
+		line-height: 1.2rem;
+		margin-top: 0.25rem;
 	}
 
 	.card-body {

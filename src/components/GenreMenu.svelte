@@ -7,15 +7,16 @@
 
 	let genres = [];
 
-  let selectedGenreNameValue;
-	selectedGenreName.subscribe(value => {
+	let selectedGenreNameValue;
+	selectedGenreName.subscribe((value) => {
 		selectedGenreNameValue = value;
-    console.log(selectedGenreNameValue)
+		console.log(selectedGenreNameValue);
 	});
 
 	const dispatch = createEventDispatcher();
 
 	onMount(() => {
+		selectedGenreName.set(findGenreName(selectedGenre));
 		fetchGenres().then((results) => {
 			genres = results;
 		});
@@ -39,7 +40,11 @@
 	<label>
 		Genre:
 		<select bind:value={selectedGenre} on:change={handleGenreChange}>
-			<option value="">{selectedGenreNameValue}</option>
+			<option value="">Select a Genre</option>
+			<!-- default option -->
+			{#if selectedGenre}
+				<option value={selectedGenre} selected>{selectedGenreNameValue}</option>
+			{/if}
 			{#each genres as genre}
 				<option value={genre.id}>{genre.name}</option>
 			{/each}
