@@ -31,17 +31,19 @@
 		});
 	});
 
-	function loadMovies(endpoint, queryParameters = '') {
-		// Modify this function to include genre ID if selected
-		const genreQuery = selectedGenre ? `&with_genres=${selectedGenre}` : '';
-		fetchMovies(endpoint, queryParameters + genreQuery).then((results) => {
-			movies = results.map((movie) => ({
-				...movie,
-				overview: truncateText(movie.overview, 70),
-				color: getNextColor()
-			}));
-		});
-	}
+function loadMovies(endpoint, queryParameters = '') {
+    // Modify this function to include genre ID if selected
+    const genreQuery = selectedGenre ? `&with_genres=${selectedGenre}` : '';
+    fetchMovies(endpoint, queryParameters + genreQuery).then((results) => {
+        movies = results
+            .filter((movie) => movie.backdrop_path && movie.backdrop_path.trim() !== '') // filter out movies without an image
+            .map((movie) => ({
+                ...movie,
+                overview: truncateText(movie.overview, 70),
+                color: getNextColor(),
+            }));
+    });
+}
 
 	function handleGenreChange(genre) {
 		selectedGenre = genre;

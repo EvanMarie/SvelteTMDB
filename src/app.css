@@ -24,7 +24,6 @@ select {
     width: 175px;
     border-radius: 0.5rem;
     border: 1px solid cyan;
-    margin-left: 0.75rem;
 }
 
 .select-container {

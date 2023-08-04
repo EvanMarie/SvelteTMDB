@@ -23,7 +23,7 @@
 
 <div class="navigation-container">
 	<h1>Search</h1>
-<GenreMenu on:genreChange={handleGenreChange} selectedGenre={selectedGenre} selectedGenreNameValue={selectedGenreNameValue} />
+<GenreMenu on:genreChange={handleGenreChange} selectedGenre={selectedGenre} />
 
 	<FilterMenu />
 

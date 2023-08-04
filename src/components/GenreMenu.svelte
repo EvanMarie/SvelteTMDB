@@ -10,7 +10,6 @@
 	let selectedGenreNameValue;
 	selectedGenreName.subscribe((value) => {
 		selectedGenreNameValue = value;
-		console.log(selectedGenreNameValue);
 	});
 
 	const dispatch = createEventDispatcher();
@@ -37,8 +36,7 @@
 </script>
 
 <div class="select-container">
-	<label>
-		Genre:
+
 		<select bind:value={selectedGenre} on:change={handleGenreChange}>
 			<option value="">Select a Genre</option>
 			<!-- default option -->
@@ -49,5 +47,5 @@
 				<option value={genre.id}>{genre.name}</option>
 			{/each}
 		</select>
-	</label>
+
 </div>
