@@ -37,7 +37,7 @@
 
 <div class="select-container">
 
-		<select bind:value={selectedGenre} on:change={handleGenreChange}>
+		<select class="minimal" bind:value={selectedGenre} on:change={handleGenreChange}>
 			<option value="">Select a Genre</option>
 			<!-- default option -->
 			{#if selectedGenre}

@@ -4,9 +4,10 @@
 	import PageContainer from './PageContainer.svelte';
 	import { filterStore } from '../lib/store.js';
 	import { onMount } from 'svelte';
-	import GenreMenu from './GenreMenu.svelte';
 	import Navigation from './Navigation.svelte';
 	import { selectedGenreName } from '../lib/store'; // Import the selectedGenreName store
+	import { createEventDispatcher } from 'svelte';
+	import Modal from './Modal.svelte';
 
 	let movies = [];
 	let genres = [];
@@ -18,6 +19,8 @@
 	selectedGenreName.subscribe((value) => {
 		selectedGenreNameValue = value;
 	});
+
+	let selectedMovie = null;
 
 	$: filterStore.subscribe((value) => {
 		filter = value;
@@ -31,17 +34,17 @@
 		});
 	});
 
-function loadMovies(endpoint, queryParameters = '', searchQuery = '') {
-    const genreQuery = selectedGenre ? `&with_genres=${selectedGenre}` : '';
-    fetchMovies(endpoint, queryParameters + genreQuery, searchQuery).then((results) => {
-        movies = results.map((movie) => ({
-            ...movie,
-            overview: truncateText(movie.overview, 70),
-            color: getNextColor()
-        }));
-    });
-}
-
+	function loadMovies(endpoint, queryParameters = '', searchQuery = '') {
+		const genreQuery = selectedGenre ? `&with_genres=${selectedGenre}` : '';
+		fetchMovies(endpoint, queryParameters + genreQuery, searchQuery).then((results) => {
+			movies = results.map((movie) => ({
+				...movie,
+				shortOverview: truncateText(movie.overview, 70),
+				color: getNextColor()
+			}));
+			console.log(movies[0]);
+		});
+	}
 
 	function handleGenreChange(genre) {
 		selectedGenre = genre;
@@ -78,6 +81,10 @@ function loadMovies(endpoint, queryParameters = '', searchQuery = '') {
 	}
 
 	const DEFAULT_IMAGE_URL = '/noimage.png';
+
+	function closeModal() {
+		selectedMovie = null;
+	}
 </script>
 
 <PageContainer>
@@ -92,7 +99,19 @@ function loadMovies(endpoint, queryParameters = '', searchQuery = '') {
 	<ul>
 		<div class="card-container">
 			{#each movies as movie}
-				<div class="card-styles" style="background-color: {movie.color}">
+				<div
+					class="card-styles"
+					style="background-color: {movie.color}"
+					on:click={() => {
+						selectedMovie = movie;
+						document.getElementById('my_modal_5').showModal();
+					}}
+					on:keydown={(event) => {
+						if (event.key === 'Enter') selectedMovie = movie;
+					}}
+					role="button"
+					tabindex="0"
+				>
 					<figure>
 						<img
 							src={movie.backdrop_path
@@ -104,13 +123,29 @@ function loadMovies(endpoint, queryParameters = '', searchQuery = '') {
 					</figure>
 					<div class="card-body">
 						<p class="card-title">{movie.title}</p>
-						<p>{movie.overview}</p>
+						<p>{movie.shortOverview}</p>
 					</div>
 				</div>
 			{/each}
 		</div>
 	</ul>
+
+	{#if selectedMovie}
+		<!-- <Modal {movie=selectedMovie} on:close={closeModal} /> -->
+	{/if}
 </PageContainer>
+
+<dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+  <form method="dialog" class="modal-box">
+    <h3 class="font-bold text-lg">{selectedMovie ? selectedMovie.title : 'Hello!'}</h3> <!-- Update here -->
+    <p class="py-4">{selectedMovie ? selectedMovie.overview : ''}</p> <!-- Update here -->
+    <div class="modal-action">
+      <button class="btn">Close</button>
+    </div>
+  </form>
+</dialog>
+
+
 
 <style>
 	.card-container {

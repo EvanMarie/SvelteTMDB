@@ -20,23 +20,38 @@ h3 {
 }
 
 select, input {
-    padding: 0.1rem;
+    padding: 0.3rem;
     width: 175px;
     border-radius: 0.5rem;
     border: 1px solid cyan;
 }
 
+/* Styling for the arrow on the selection element */
+select {
+    -webkit-appearance: none;
+    /* Safari and Chrome */
+    -moz-appearance: none;
+    /* Firefox */
+    appearance: none;
+    padding-right: 30px !important;
+    /* Add some padding to make space for a custom arrow icon */
+    background: url('arrowdown.png') no-repeat right center;
+    /* Replace 'custom-arrow.png' with your custom arrow icon */
+}
+
+
+
 input {
     width: 250px;
-    padding: 0rem 0.5rem;
 }
 
 
 .select-container, .input-container {
     display: flex;
+    height: 100%;
     align-items: center;
-    margin-bottom: 1rem;
     font-size: 1rem;
+    justify-content: center;
 }
 
 

@@ -11,5 +11,12 @@
 		justify-content: flex-start;
 		align-items: center;
 		padding-bottom: 40px;
+		padding-top: 100px;
+	}
+
+	@media (min-width: 768px) {
+		.page-container {
+			padding-top: 40px;
+		}
 	}
 </style>
