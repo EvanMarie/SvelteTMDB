@@ -1,4 +1,3 @@
-<!-- GenreMenu.svelte -->
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { fetchGenres } from '../lib/fetchFilms';
@@ -7,6 +6,12 @@
 	export let selectedGenre; // Accept selectedGenre as a prop
 
 	let genres = [];
+
+  let selectedGenreNameValue;
+	selectedGenreName.subscribe(value => {
+		selectedGenreNameValue = value;
+    console.log(selectedGenreNameValue)
+	});
 
 	const dispatch = createEventDispatcher();
 
@@ -34,7 +39,7 @@
 	<label>
 		Genre:
 		<select bind:value={selectedGenre} on:change={handleGenreChange}>
-			<option value="">Select Genre</option>
+			<option value="">{selectedGenreNameValue}</option>
 			{#each genres as genre}
 				<option value={genre.id}>{genre.name}</option>
 			{/each}

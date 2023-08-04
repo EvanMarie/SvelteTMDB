@@ -17,7 +17,6 @@
 	let selectedGenreNameValue;
 	selectedGenreName.subscribe(value => {
 		selectedGenreNameValue = value;
-
 	});
 
 
@@ -47,7 +46,6 @@
 
 	function handleGenreChange(genre) {
 		selectedGenre = genre;
-        console.log(selectedGenre)
 		loadMovies(filter);
 	}
 
@@ -70,7 +68,7 @@
 </script>
 
 <PageContainer>
-	<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} selectedGenre={selectedGenre} selectedGenreName={selectedGenreName} />
+	<Navigation on:genreChange={(event) => handleGenreChange(event.detail)} selectedGenre={selectedGenre} />
 
 	<h1 style="margin-bottom: 1rem;">{formatFilter(filter)} {selectedGenreNameValue}</h1>
 	
@@ -94,6 +92,7 @@
 		</div>
 	</ul>
 </PageContainer>
+
 
 <style>
 	.card-container {
