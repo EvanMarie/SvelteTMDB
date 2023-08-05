@@ -29,6 +29,12 @@
 </script>
 
 <div class="navigation-container">
+	<div class="logo-container">
+	<img src="njatmdbCyan.png" alt="logo" class="logo" /></div>
+	<div class="user-inputs" >
+	<GenreMenu on:genreChange={handleGenreChange} {selectedGenre} />
+
+	<FilterMenu />
 	<div class="input-container">
 		<input
 			type="text"
@@ -36,35 +42,57 @@
 			placeholder="Search movies..."
 			on:keydown={handleSearchInput}
 		/>
+		</div>	
 	</div>
-	<GenreMenu on:genreChange={handleGenreChange} {selectedGenre} />
-
-	<FilterMenu />
 </div>
 
 <style>
 	.navigation-container {
-        position: fixed;
-        z-index: 10;
-        background-color: rgba(28, 32, 48, 0.7);
-        top: 0;
-        left: 0;
+		position: fixed;
+		z-index: 10;
+		background-color: rgba(28, 32, 48, 0.8);
+		top: 0;
+		left: 0;
 		width: 100%;
-        height: 160px;
+		height: 215px;
 		padding: 10px 20px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-        box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.8);
-        gap: 10px;
+		box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.8);
+		gap: 12px;
 	}
 
-	@media (min-width: 768px) {
+	.logo-container {
+		display: flex;
+		width: 100%;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	.logo {
+		width: 275px;
+	}
+
+	.user-inputs {
+		display: flex;
+		padding: 0px 20px;
+		width: 100%;
+		flex-direction: column;
+		justify-content: space-evenly;
+		gap: 10px;
+	}
+
+	@media (min-width: 1080px) {
 		.navigation-container {
 			flex-direction: row;
-			gap: 40px;
-                    height: 70px;
+	justify-content: space-between;
+			height: 70px;
+		}
+
+		.user-inputs {
+			flex-direction: row;
 		}
 	}
 </style>

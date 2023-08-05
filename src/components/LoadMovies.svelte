@@ -38,7 +38,7 @@
 		'rgba(92, 2, 51, 0.2)',
 		'rgba(74, 2, 92, 0.2)',
 		'rgba(28, 2, 92, 0.2)',
-		'rgba(2, 71, 92, 0.2)',
+	
 		'rgba(2, 92, 62, 0.2)',
 		'rgba(166, 76, 3, 0.2)'
 	];
@@ -213,7 +213,6 @@
 	<form
 		method="dialog"
 		class="modal-backdrop"
-		style={`background-color: ${selectedMovie ? selectedMovie.backdrop : ''}`}
 	>
 		<button>close</button>
 	</form>
@@ -224,7 +223,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center;
+		align-items: center; 
 		gap: 1.5rem;
 	}
 
@@ -239,7 +238,6 @@
 	.card-styles {
 		padding: 1rem;
 		width: 300px;
-		height: auto;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -254,6 +252,15 @@
 		box-shadow: 2px 2px 30px 1px rgba(0, 0, 0, 0.8);
 		transition: all 0.4s ease-in-out;
 	}
+
+    @media (min-width: 768px) {
+    .card-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: 2rem;
+        align-items: stretch;
+    }
+}
 
 	.type {
 		color: cyan;
@@ -306,13 +313,14 @@
 	}
 
 	.modal-backdrop {
-		backdrop-filter: blur(3px);
+        background-color: rgba(0, 0, 23, 0.4);
+		backdrop-filter: blur(5px);
 	}
 
 	.modal-box {
 		width: 95%;
 		max-width: 700px;
-		box-shadow: 1px 1px 10px 1px rgba(255, 255, 255, 0.2);
+		box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.5);
 	}
 
 	.movie-poster-modal {

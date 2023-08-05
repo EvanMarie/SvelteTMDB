@@ -21,9 +21,12 @@ h3 {
 
 select, input {
     padding: 0.3rem 0.6rem;
-    width: 175px;
+    width: 250px;
     border-radius: 0.5rem;
     border: 1px solid cyan;
+    background-color: #222429 !important;
+    color: #fff;
+    font-weight: bold;
 }
 
 /* Styling for the arrow on the selection element */
@@ -40,15 +43,8 @@ select {
 }
 
 
-
-input {
-    width: 250px;
-}
-
-
 .select-container, .input-container {
     display: flex;
-    height: 100%;
     align-items: center;
     font-size: 1rem;
     justify-content: center;
