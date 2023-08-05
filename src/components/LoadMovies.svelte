@@ -135,7 +135,12 @@
 		<div class="card-container">
 			{#each movies as movie}<div class="indicator">
 					<div class="indicator-item badge">
-						<div class="radial-progress" style="--value:{movie.rating}; --size:1rem; --thickness: 0.2rem;">{movie.rating}%</div>
+						<div
+							class="radial-progress"
+							style="--value:{movie.rating}; --size:1rem; --thickness: 0.2rem;"
+						>
+							{movie.rating}%
+						</div>
 					</div>
 					<div
 						class="card-styles"
@@ -267,19 +272,21 @@
 		padding: 3px;
 		border-radius: 50%;
 		background-color: cyan;
-        top: 15px;
-        right: 15px;
+		top: 15px;
+		right: 15px;
 	}
 
 	.radial-progress {
 		width: 95%;
 		height: 95%;
-        color: black;
-        font-size: 1rem;
-        font-weight: bold;
+		color: black;
+		font-size: 1rem;
+		font-weight: bold;
 	}
 
-    
+	.radial-progress::after {
+		background-color: transparent;
+	}
 
 	@media (min-width: 768px) {
 		.card-container {
