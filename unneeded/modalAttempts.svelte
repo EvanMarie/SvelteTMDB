@@ -33,38 +33,13 @@
 		});
 	});
 
-	let colors = ['#5c0233', '#4a025c', '#1c025c', '#02475c', '#025c3e', '#a64c03'];
-	let backdrops = [
-		'rgba(92, 2, 51, 0.2)',
-		'rgba(74, 2, 92, 0.2)',
-		'rgba(28, 2, 92, 0.2)',
-		'rgba(2, 71, 92, 0.2)',
-		'rgba(2, 92, 62, 0.2)',
-		'rgba(166, 76, 3, 0.2)'
-	];
-	let colorIndex = 0; // Initialize the color index to 0
-	let backdropIndex = 0;
-
-	function getNextColor() {
-		const color = colors[colorIndex];
-		colorIndex = (colorIndex + 1) % colors.length;
-		return color;
-	}
-
-	function getNextBackdrop() {
-		const backdrop = backdrops[backdropIndex];
-		backdropIndex = (backdropIndex + 1) % backdrops.length;
-		return backdrop;
-	}
-
 	function loadMovies(endpoint, queryParameters = '', searchQuery = '') {
 		const genreQuery = selectedGenre ? `&with_genres=${selectedGenre}` : '';
 		fetchMovies(endpoint, queryParameters + genreQuery, searchQuery).then((results) => {
 			movies = results.map((movie) => ({
 				...movie,
 				shortOverview: truncateText(movie.overview, 70),
-				color: getNextColor(),
-				backdrop: getNextBackdrop()
+				color: getNextColor()
 			}));
 			console.log(movies[0]);
 		});
@@ -90,6 +65,15 @@
 			.join(' ');
 	}
 
+	let colors = ['#5c0233', '#4a025c', '#1c025c', '#02475c', '#025c3e', '#a64c03'];
+	let colorIndex = 0; // Initialize the color index to 0
+
+	function getNextColor() {
+		const color = colors[colorIndex];
+		colorIndex = (colorIndex + 1) % colors.length;
+		return color;
+	}
+
 	function handleSearchChange(searchQuery) {
 		// console.log('Handling Search:', searchQuery);
 		loadMovies(filter, '', searchQuery);
@@ -99,17 +83,6 @@
 
 	function closeModal() {
 		selectedMovie = null;
-	}
-
-	function formatDate(dateString) {
-		if (!dateString) return '';
-
-		const date = new Date(dateString);
-		const day = date.getDate();
-		const month = date.toLocaleString('default', { month: 'long' });
-		const year = date.getFullYear();
-
-		return `${day} ${month} ${year}`;
 	}
 </script>
 
@@ -148,7 +121,7 @@
 						/>
 					</figure>
 					<div class="card-body">
-						<p class="card-title" style="color: cyan;">{movie.title}</p>
+						<p class="card-title">{movie.title}</p>
 						<p>{movie.shortOverview}</p>
 					</div>
 				</div>
@@ -158,59 +131,18 @@
 </PageContainer>
 
 <dialog id="my_modal_4" class="modal">
-	<form method="dialog" class="modal-box w-11/12">
-		<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-		<div class="modal-stack">
-			<div class="modal-image-overview">
-				<img
-					src={selectedMovie
-						? `https://image.tmdb.org/t/p/w500${selectedMovie.backdrop_path}`
-						: DEFAULT_IMAGE_URL}
-					alt="Movie Poster"
-					class="movie-poster-modal"
-				/>
-				<h3 class="font-bold text-xl" style="color: cyan;">
-					{selectedMovie ? selectedMovie.title : 'Hello!'}
-				</h3>
-				<p style="padding: 5px 10px;">{selectedMovie ? selectedMovie.overview : ''}</p>
-			</div>
-			{#if selectedMovie}
-				{#if selectedMovie.genre_ids}
-					<div class="genre-list">
-						<span class="type" style="padding-right: 5px">Genres: </span>
-						{#each selectedMovie.genre_ids as genreId, index}
-							<span class="genre">
-								{findGenreName(genreId)}
-								{#if index !== selectedMovie.genre_ids.length - 1}, {/if}
-							</span>
-						{/each}
-					</div>
-				{/if}
+  <form method="dialog" class="modal-box w-11/12 max-w-5xl">
+			<div class="modal-container">
+				<h3 class="font-bold text-lg">{selectedMovie ? selectedMovie.title : 'Hello!'}</h3>
 
-				<div class="stats">
-					<div class="stat">
-						<div class="type">Rating</div>
-						<div class="value">{selectedMovie ? selectedMovie.vote_average : ''} / 10</div>
-					</div>
-					<div class="stat">
-						<div class="type">Release Date</div>
-						<div class="value">{selectedMovie ? formatDate(selectedMovie.release_date) : ''}</div>
-					</div>
-					<div class="stat">
-						<div class="type">Popularity</div>
-						<div class="value">{selectedMovie ? selectedMovie.popularity : ''}</div>
-					</div>
+				<p class="py-4">{selectedMovie ? selectedMovie.overview : ''}</p>
+
+				<div class="modal-action">
+					<button class="btn">Close</button>
 				</div>
-			{/if}
-		</div>
-	</form>
-	<form
-		method="dialog"
-		class="modal-backdrop"
-		style={`background-color: ${selectedMovie ? selectedMovie.backdrop : ''}`}
-	>
-		<button>close</button>
-	</form>
+			</div>
+		</form>
+
 </dialog>
 
 <style>
@@ -219,11 +151,10 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		gap: 1.5rem;
+		gap: 1.25rem;
 	}
 
-	.movie-poster,
-	.movie-poster-modal {
+	.movie-poster {
 		width: 250px;
 		height: 200px;
 		border-radius: 10px;
@@ -239,27 +170,13 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 10px;
-		box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.6);
+		box-shadow: 1px 1px 20px 1px rgba(0, 0, 0, 0.6);
 	}
 
 	.card-styles:hover {
 		cursor: pointer;
-		transform: scale(1.05) rotate(-3deg);
-		box-shadow: 2px 2px 30px 1px rgba(0, 0, 0, 0.8);
-		transition: all 0.4s ease-in-out;
-	}
-
-	.type {
-		color: cyan;
-	}
-
-	.stats {
-		width: 100%;
-		text-align: center;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 1rem;
+		transform: scale(1.04) rotate(-1deg);
+		transition: transform 0.5s ease;
 	}
 
 	.card-title {
@@ -281,50 +198,18 @@
 		font-size: 0.85rem;
 	}
 
-	.modal-image-overview {
+	.modal-overlay {
+		width: 100vw;
+		height: 100vh;
+		border-radius: 10px;
+		background-color: rgba(10, 30, 50, 0.4);
 		display: flex;
-		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		gap: 1rem;
-	}
-
-	.modal-stack {
-		display: flex;
-		max-width: 700px;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 1rem;
-	}
-
-	.modal-backdrop {
-		backdrop-filter: blur(3px);
 	}
 
 	.modal-box {
 		width: 100%;
-		max-width: 700px;
-		box-shadow: 1px 1px 10px 1px rgba(255, 255, 255, 0.2);
-	}
-
-	.movie-poster-modal {
-		width: 300px;
-		height: 250px;
-	}
-
-	.modal p {
-		margin: 0;
-		padding: 0;
-	}
-
-	@media (min-width: 768px) {
-		.modal-image-overview {
-			display: block;
-		}
-		.movie-poster-modal {
-			float: left;
-			margin-right: 1rem;
-		}
+		max-width: 800px;
 	}
 </style>
