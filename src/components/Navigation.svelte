@@ -72,7 +72,7 @@
 	}
 
 	.logo {
-		width: 275px;
+		width: 240px;
 	}
 
 	.user-inputs {

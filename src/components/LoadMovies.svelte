@@ -6,7 +6,6 @@
 	import { onMount } from 'svelte';
 	import Navigation from './Navigation.svelte';
 	import { selectedGenreName } from '../lib/store'; // Import the selectedGenreName store
-	import { createEventDispatcher } from 'svelte';
 
 	let movies = [];
 	let genres = [];
@@ -38,7 +37,7 @@
 		'rgba(92, 2, 51, 0.2)',
 		'rgba(74, 2, 92, 0.2)',
 		'rgba(28, 2, 92, 0.2)',
-	
+
 		'rgba(2, 92, 62, 0.2)',
 		'rgba(166, 76, 3, 0.2)'
 	];
@@ -60,12 +59,16 @@
 	function loadMovies(endpoint, queryParameters = '', searchQuery = '') {
 		const genreQuery = selectedGenre ? `&with_genres=${selectedGenre}` : '';
 		fetchMovies(endpoint, queryParameters + genreQuery, searchQuery).then((results) => {
-			movies = results.map((movie) => ({
-				...movie,
-				shortOverview: truncateText(movie.overview, 70),
-				color: getNextColor(),
-				backdrop: getNextBackdrop()
-			}));
+			movies = results.map((movie) => {
+				const rating = Math.round(movie.vote_average * 10);
+				return {
+					...movie,
+					shortOverview: truncateText(movie.overview, 70),
+					color: getNextColor(),
+					backdrop: getNextBackdrop(),
+					rating // This is the rounded rating
+				};
+			});
 			console.log(movies[0]);
 		});
 	}
@@ -112,11 +115,11 @@
 		return `${day} ${month} ${year}`;
 	}
 
-      function roundPopularity(popularity) {
-    if (!popularity) return '';
+	function roundPopularity(popularity) {
+		if (!popularity) return '';
 
-    return Math.round(popularity);
-  }
+		return Math.round(popularity);
+	}
 </script>
 
 <PageContainer>
@@ -130,35 +133,38 @@
 
 	<ul>
 		<div class="card-container">
-			{#each movies as movie}
-				<div
-					class="card-styles"
-					style="background-color: {movie.color}"
-					on:click={() => {
-						selectedMovie = movie;
-						document.getElementById('my_modal_4').showModal();
-					}}
-					on:keydown={(event) => {
-						if (event.key === 'Enter') selectedMovie = movie;
-					}}
-					role="button"
-					tabindex="0"
-				>
-					<figure>
-						<img
-							src={movie.backdrop_path
-								? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
-								: DEFAULT_IMAGE_URL}
-							alt="Movie Poster"
-							class="movie-poster"
-						/>
-					</figure>
-					<div class="card-body">
-						<p class="card-title" style="color: cyan;">{movie.title}</p>
-						<p>{movie.shortOverview}</p>
+			{#each movies as movie}<div class="indicator">
+					<div class="indicator-item badge">
+						<div class="radial-progress" style="--value:{movie.rating}; --size:1rem; --thickness: 0.2rem;">{movie.rating}%</div>
 					</div>
-				</div>
-			{/each}
+					<div
+						class="card-styles"
+						style="background-color: {movie.color}"
+						on:click={() => {
+							selectedMovie = movie;
+							document.getElementById('my_modal_4').showModal();
+						}}
+						on:keydown={(event) => {
+							if (event.key === 'Enter') selectedMovie = movie;
+						}}
+						role="button"
+						tabindex="0"
+					>
+						<figure>
+							<img
+								src={movie.backdrop_path
+									? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
+									: DEFAULT_IMAGE_URL}
+								alt="Movie Poster"
+								class="movie-poster"
+							/>
+						</figure>
+						<div class="card-body">
+							<p class="card-title" style="color: cyan;">{movie.title}</p>
+							<p>{movie.shortOverview}</p>
+						</div>
+					</div>
+				</div>{/each}
 		</div>
 	</ul>
 </PageContainer>
@@ -204,16 +210,15 @@
 					</div>
 					<div class="stat">
 						<div class="type">Popularity</div>
-						<div class="value">{selectedMovie ? roundPopularity(selectedMovie.popularity) : ''}</div>
+						<div class="value">
+							{selectedMovie ? roundPopularity(selectedMovie.popularity) : ''}
+						</div>
 					</div>
 				</div>
 			{/if}
 		</div>
 	</form>
-	<form
-		method="dialog"
-		class="modal-backdrop"
-	>
+	<form method="dialog" class="modal-backdrop">
 		<button>close</button>
 	</form>
 </dialog>
@@ -223,8 +228,8 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center; 
-		gap: 1.5rem;
+		align-items: center;
+		gap: 2rem;
 	}
 
 	.movie-poster,
@@ -253,14 +258,37 @@
 		transition: all 0.4s ease-in-out;
 	}
 
-    @media (min-width: 768px) {
-    .card-container {
-        flex-direction: row;
-        flex-wrap: wrap;
-        column-gap: 2rem;
-        align-items: stretch;
-    }
-}
+	.badge {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 60px;
+		width: 60px;
+		padding: 3px;
+		border-radius: 50%;
+		background-color: cyan;
+        top: 15px;
+        right: 15px;
+	}
+
+	.radial-progress {
+		width: 95%;
+		height: 95%;
+        color: black;
+        font-size: 1rem;
+        font-weight: bold;
+	}
+
+    
+
+	@media (min-width: 768px) {
+		.card-container {
+			flex-direction: row;
+			flex-wrap: wrap;
+			column-gap: 3rem;
+			align-items: stretch;
+		}
+	}
 
 	.type {
 		color: cyan;
@@ -273,7 +301,7 @@
 		justify-content: space-evenly;
 		align-items: center;
 		gap: 0.5rem;
-        font-size: 0.75rem;
+		font-size: 0.75rem;
 	}
 
 	.card-title {
@@ -313,7 +341,7 @@
 	}
 
 	.modal-backdrop {
-        background-color: rgba(0, 0, 23, 0.4);
+		background-color: rgba(0, 0, 23, 0.4);
 		backdrop-filter: blur(5px);
 	}
 
@@ -342,8 +370,8 @@
 			margin-right: 1rem;
 		}
 
-        .stats {
-            font-size: 1rem;
-        }
+		.stats {
+			font-size: 1rem;
+		}
 	}
 </style>
