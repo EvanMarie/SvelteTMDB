@@ -11,7 +11,7 @@
 		justify-content: flex-start;
 		align-items: center;
 		padding-bottom: 40px;
-		padding-top: 100px;
+		padding-top: 80px;
 	}
 
 	@media (min-width: 768px) {

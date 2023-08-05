@@ -111,6 +111,12 @@
 
 		return `${day} ${month} ${year}`;
 	}
+
+      function roundPopularity(popularity) {
+    if (!popularity) return '';
+
+    return Math.round(popularity);
+  }
 </script>
 
 <PageContainer>
@@ -181,7 +187,7 @@
 						{#each selectedMovie.genre_ids as genreId, index}
 							<span class="genre">
 								{findGenreName(genreId)}
-								{#if index !== selectedMovie.genre_ids.length - 1}, {/if}
+								{#if index !== selectedMovie.genre_ids.length - 1}/ {/if}
 							</span>
 						{/each}
 					</div>
@@ -193,12 +199,12 @@
 						<div class="value">{selectedMovie ? selectedMovie.vote_average : ''} / 10</div>
 					</div>
 					<div class="stat">
-						<div class="type">Release Date</div>
+						<div class="type">Release</div>
 						<div class="value">{selectedMovie ? formatDate(selectedMovie.release_date) : ''}</div>
 					</div>
 					<div class="stat">
 						<div class="type">Popularity</div>
-						<div class="value">{selectedMovie ? selectedMovie.popularity : ''}</div>
+						<div class="value">{selectedMovie ? roundPopularity(selectedMovie.popularity) : ''}</div>
 					</div>
 				</div>
 			{/if}
@@ -257,9 +263,10 @@
 		width: 100%;
 		text-align: center;
 		display: flex;
-		justify-content: center;
+		justify-content: space-evenly;
 		align-items: center;
-		gap: 1rem;
+		gap: 0.5rem;
+        font-size: 0.75rem;
 	}
 
 	.card-title {
@@ -303,7 +310,7 @@
 	}
 
 	.modal-box {
-		width: 100%;
+		width: 95%;
 		max-width: 700px;
 		box-shadow: 1px 1px 10px 1px rgba(255, 255, 255, 0.2);
 	}
@@ -326,5 +333,9 @@
 			float: left;
 			margin-right: 1rem;
 		}
+
+        .stats {
+            font-size: 1rem;
+        }
 	}
 </style>
