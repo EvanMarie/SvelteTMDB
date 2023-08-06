@@ -26,6 +26,8 @@
 	function handleGenreChange(event) {
 		dispatch('genreChange', event.detail);
 	}
+
+	
 </script>
 
 <div class="navigation-container">

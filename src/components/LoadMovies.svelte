@@ -267,8 +267,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		height: 60px;
-		width: 60px;
+		height: 45px;
+		width: 45px;
 		padding: 3px;
 		border-radius: 50%;
 		background-color: cyan;
@@ -277,10 +277,10 @@
 	}
 
 	.radial-progress {
-		width: 95%;
-		height: 95%;
+		width: 98%;
+		height: 98%;
 		color: black;
-		font-size: 1rem;
+		font-size: 0.8rem;
 		font-weight: bold;
 	}
 
